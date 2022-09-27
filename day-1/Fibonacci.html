@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 1 - Fibonacci Sequence</title>
+</head>
+
+<body>
+    <script>
+        let flag = true, opt, n;
+
+        while (flag) {
+            opt = prompt("--------------------------------------------\n" + 
+                         "| 1. Get first Fibonacci numbers           \n" +
+                         "| 2. Get a Fibonacci number                \n" + 
+                         "| 3. Get the sum of a Fibonacci sequence   \n" +
+                         "| 4. Exit                                  \n" +
+                         "--------------------------------------------\n" );
+
+            switch (opt) {
+                case "1":
+                    n = prompt("How many Fibonacci numbers do you want to get? [Positions start at 1]");
+
+                    if (n < 1) {
+                        alert("Error: The number must be greater than 0");
+                    } else {
+                        alert(getFirstFibonacciNums(n));
+                    }
+                    break;
+
+                case "2":
+                    n = prompt("Which Fibonacci number do you want to get? [Positions start at 1]");
+
+                    if (n < 1) {
+                        alert("Error: The number must be greater than 0");
+                    } else {
+                        alert(getFibonacciNum(n));
+                    }
+                    break;
+
+                case "3":
+                    n = prompt("How many Fibonacci numbers do you want to sum? [Positions start at 1]");
+
+                    if (n < 1) {
+                        alert("Error: The number must be greater than 0");
+                    } else {
+                        alert(getFibonacciSequenceSum(n));
+                    }
+                    break;
+
+                case "4":
+                    flag = false;
+                    break;
+
+                default:
+                    alert("Error: Invalid option");
+                    flag = false;
+                    break;
+            }
+        }
+
+        function getFirstFibonacciNums(n) {
+            let act = 1, prev = 0, aux, arr = [];
+
+            for (let i = 0; i < n; i++) {
+                //Se guarda el valor actual en el arreglo
+                arr.push(act);
+                aux = act;
+                //Se calcula el siguiente valor
+                act = act + prev;
+                //Se actualiza el valor anterior
+                prev = aux;
+            }
+
+            return arr;
+        }
+
+        function getFibonacciNum(n) {
+            let act = 1, prev = 0, aux;
+
+            for (let i = 0; i < n - 1; i++) {
+                aux = act;
+                //Se calcula el siguiente valor
+                act = act + prev;
+                //Se actualiza el valor anterior
+                prev = aux;
+            }
+
+            return act;
+        }
+
+        function getFibonacciSequenceSum(n) {
+            let seq = getFirstFibonacciNums(n), sum = 0;
+
+            for (let i = 0; i < seq.length; i++) {
+                //Se suma cada valor en el arreglo
+                sum += seq[i];
+            }
+
+            return sum;
+        }
+    </script>
+</body>
+
+</html>
