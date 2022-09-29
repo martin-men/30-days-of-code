@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 3 - Routes</title>
+</head>
+<body>
+    <script>
+        let distancePoints = [], timePoints = [];
+        let auxName, auxX, auxY, auxHour, auxMins, auxPoint, pointIndex;
+        let flag = true, distanceFlag = true, timeFlag = true, opc, distOpc, timeOpc;
+
+        while (flag) {
+            opc = prompt("--------------------------------------------\n" + 
+                        "| 1. Use distance points\n" +
+                        "| 2. Use time points\n" + 
+                        "| 3. Exit\n" +
+                        "--------------------------------------------\n" );
+            switch (opc) {
+                case "1":
+                    while (distanceFlag) {
+                        distOpc = prompt("--------------------------------------------\n" + 
+                                    "| 1. Add distance point\n" +
+                                    "| 2. Get route\n" + 
+                                    "| 3. Back to main menu\n" +
+                                    "--------------------------------------------\n" );
+
+                        switch (distOpc) {
+                            case "1":
+                                auxName = prompt("Enter the name of the point");
+                                auxX = prompt("Enter the X coordinate of the point");
+                                auxY = prompt("Enter the Y coordinate of the point");
+                                auxPoint = new DistancePoint(auxName, auxX, auxY, 0, 0);
+                                distancePoints.push(auxPoint);
+                                break;
+                            
+                            case "2":
+                                auxName = prompt("Enter the name of the origin point");
+                                auxIndex = findPointIndex(auxName, distancePoints);
+                                
+                                if (auxIndex == -1) {
+                                    alert("POINT NOT FOUND");
+                                } else {
+                                    distancePoints[auxIndex].state = 1;
+                                    alert("Route: \n" + getDistanceRoute(distancePoints, auxIndex));
+                                    turnStatesToZero(distancePoints);
+                                }
+                                break;
+                            
+                            case "3":
+                                distanceFlag = false;
+                                break;
+                        }
+                    }
+                    distanceFlag = true;
+                    break;
+
+                case "2":
+                    while (timeFlag) {
+                        timeOpc = prompt("--------------------------------------------\n" + 
+                                    "| 1. Add time point\n" +
+                                    "| 2. Get route\n" + 
+                                    "| 3. Back to main menu\n" +
+                                    "--------------------------------------------\n" );
+
+                        switch (timeOpc) {
+                            case "1":
+                                auxName = prompt("Enter the name of the point");
+                                do {
+                                    auxHour = prompt("Enter the hours of the point");
+                                    if (auxHour < 0) {
+                                        alert("Error: The hour must be greater than 0");
+                                    }
+                                } while (auxHour < 0);
+                                do{
+                                    auxMins = prompt("Enter the minutes of the point");
+                                    if (auxMins < 0 || auxMins > 59) {
+                                        alert("Error: The minutes must be between 0 and 59");
+                                    }
+                                } while (auxMins < 0 || auxMins > 59);
+                                auxPoint = new TimePoint(auxName, ((auxHour * 60) + auxMins));
+                                timePoints.push(auxPoint);
+                                break;
+                            
+                            case "2":
+                                if (timePoints.length == 0) {
+                                    alert("THERE ARE NO TIME POINTS");
+                                } else {
+                                    alert("Route: \n" + getTimeRoute(timePoints));
+                                }
+                                break;
+                            
+                            case "3":
+                                timeFlag = false;
+                                break;
+                        }
+                    }
+                    timeFlag = true;
+                    break;
+
+                case "3":
+                    flag = false;
+                    break;
+            }
+        }
+
+        function TimePoint (name, time) {
+            this.name = name;
+            this.time = time;
+        }
+        
+        function DistancePoint (name, coorX, coorY, state, distance) {
+            this.name = name;
+            this.coorX = coorX;
+            this.coorY = coorY;
+            //0 = not visited, 1 = visited
+            this.state = state;
+            this.distance = distance;
+        }
+
+        function getDistance (pointA, pointB) {
+            //Formula de la distancia entre dos puntos
+            return Math.sqrt(Math.pow((pointB.coorX - pointA.coorX), 2) + Math.pow((pointB.coorY - pointA.coorY), 2));
+        }
+
+        function findPointIndex (name, points) {
+            for (let i = 0; i < points.length; i++) {
+                if (points[i].name == name) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function getNextDistanceStepIndex (distancePoints, currentPoint) {
+            //Se genera un arreglo de los puntos no visitados
+            let notVisitedPoints = distancePoints.filter((point) => {return point.state == 0});
+            
+            for (let i = 0; i < notVisitedPoints.length; i++) {
+                //Se calcula la distancia entre el punto actual y el punto no visitado
+                notVisitedPoints[i].distance = getDistance(currentPoint, notVisitedPoints[i]);
+            }
+
+            //Se retorna el indice del punto no visitado con menor distancia al punto actual
+            return findPointIndex(notVisitedPoints.sort((a, b) => {return a.distance - b.distance})[0].name, distancePoints);
+        }
+
+        function getDistanceRoute (distancePoints, originIndex) {
+            let currentIndex, nextIndex, route = "";
+            currentIndex = originIndex;
+            
+            //Se recorre el arreglo de puntos hasta que todos los puntos hayan sido visitados
+            for (let i = 0; i < distancePoints.length - 1; i++) {
+                nextIndex = getNextDistanceStepIndex(distancePoints, distancePoints[currentIndex]);
+                distancePoints[nextIndex].state = 1;
+                route += distancePoints[currentIndex].name + " -> " + distancePoints[nextIndex].name + "\n";
+                currentIndex = nextIndex;
+            }
+
+            return route;
+        }
+
+        function getTimeRoute (timePoints) {
+            let sortedPoints = timePoints.sort((a, b) => {return b.time - a.time}), route = "";
+
+            for (let i = 0; i < sortedPoints.length - 1; i++) {
+                route += sortedPoints[i].name + " -> " + sortedPoints[i + 1].name + "\n";
+            }
+
+            return route;
+        }
+
+        function turnStatesToZero (points) {
+            for (let i = 0; i < points.length; i++) {
+                points[i].state = 0;
+            }
+        }
+    </script>
+</body>
+</html>
