@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 4 - Dates</title>
+</head>
+
+<body>
+    <script>
+        let flag = true, opc, initialDate = "", finalDate = "", workTime;
+
+        while (flag) {
+            opc = prompt("--------------------------------------------\n" +
+                "| 1. Distribute time\n" +
+                "| 2. Exit\n" +
+                "--------------------------------------------\n");
+
+            switch (opc) {
+                case "1":
+                    initialDate = prompt("Enter the initial date (dd/mm/yyyy)");
+                    finalDate = prompt("Enter the final date (dd/mm/yyyy)");
+                    initialDate = initialDate.split("/");
+                    finalDate = finalDate.split("/");
+                    initialDate = new Date(Number(initialDate[2]), Number(initialDate[1]) - 1, Number(initialDate[0]));
+                    finalDate = new Date(Number(finalDate[2]), Number(finalDate[1]) - 1, Number(finalDate[0]));
+                    workTime = prompt("Enter the work time (hh:mm:ss)");
+                    workTime = workTime.split(":");
+                    workTime = Number(workTime[0]) * 3600 + Number(workTime[1]) * 60 + Number(workTime[2]);
+
+                    alert(distributeTime(workTime, initialDate, finalDate));
+                    break;
+                
+                case "2":
+                    flag = false;
+                    break;
+            }
+        }
+
+        function getAvailableDays(initialDate, finalDate) {
+            let dayCount = 0;
+
+            //Comparar las fechas segun los milisegundos transcurridos desde 1970
+            while (initialDate.getTime() <= finalDate.getTime()) {
+                // 0 = Domingo, 6 = Sabado
+                if ((initialDate.getDay() != 0) && (initialDate.getDay() != 6)) {
+                    dayCount++;
+                }
+                //Sumar un dia a la fecha en milisegundos
+                initialDate.setTime(initialDate.getTime() + 86400000);
+            }
+            
+            return dayCount;
+        }
+
+        function distributeTime(workSeconds, initialDate, finalDate) {
+            let availableDays = getAvailableDays(initialDate, finalDate);
+
+            if (availableDays == 0) {
+                //Si es que no hay dias disponibles, significa que la fecha final es menor a la inicial
+                return "The final date can't be earlier the initial date";
+            } else {
+                let secondsPerDay = workSeconds / availableDays;
+                let distributedHours = "", distributedMinutes = "", distributedSeconds = "";
+
+                /*Se obtienen las horas, minutos y segundos de trabajo diarios por separado
+                3600 segundos -> 1 hora*/
+                distributedHours = Math.floor(secondsPerDay / 3600);
+                distributedMinutes = Math.floor((secondsPerDay % 3600) / 60);
+                distributedSeconds = Math.floor((secondsPerDay % 3600) % 60);
+
+                return `You should spend ${distributedHours} hours: ${distributedMinutes} minutes: 
+                    ${distributedSeconds} seconds per day`;
+            }
+        }
+    </script>
+</body>
+
+</html>
