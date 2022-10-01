@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 5 - Luhn</title>
+</head>
+
+<body>
+    <script>
+        let flag = true, opc, cardNumber, modNumber;
+
+        while (flag) {
+            opc = prompt("--------------------------------------------\n" +
+                "| 1. Validate card number\n" +
+                "| 2. Get verification digit for a card number\n" +
+                "| 3. Exit\n" +
+                "--------------------------------------------\n");
+
+            switch (opc) {
+                case "1":
+                    do {
+                        cardNumber = prompt("Enter the card number (16 digits)");
+                    } while (cardNumber.length != 16);
+                    do {
+                        modNumber = prompt("For a module N verification, enter N (greater than 0)");
+                    } while (modNumber <= 0);
+                    alert("The card is: " + validateCardNumber(cardNumber, modNumber));
+                    break;
+
+                case "2":
+                    do {
+                        cardNumber = prompt("Enter the partial card number (15 digits)");
+                    } while (cardNumber.length != 15);
+                    do {
+                        modNumber = prompt("For a module N calculation, enter N (greater than 0)");
+                    } while (modNumber <= 0);
+                    alert("The verification digit is: " + getVerificationDigit(cardNumber, modNumber));
+                    break;
+
+                case "3":
+                    flag = false;
+                    break;
+            }
+        }
+
+        function validateCardNumber(creditCard, modNumber) {
+            //Se separa cada digito de la tarjeta en un arreglo
+            creditCard = creditCard.split("");
+            let sum = 0;
+
+            //Se recorre de derecha a izquierda desde el penultimo digito
+            for (let i = creditCard.length - 2; i >= 0; i -= 2) {
+                creditCard[i] = Number(creditCard[i]) * 2;
+                if (creditCard[i] > 9) {
+                    creditCard[i] = creditCard[i] - 9;
+                }
+            }
+
+            //Se suman todos los digitos
+            sum = creditCard.reduce(
+                (acc, curr) => {
+                    return Number(acc) + Number(curr)
+                }
+            );
+
+            return (sum % modNumber == 0) ? "Valid" : "Invalid";
+        }
+
+        function getVerificationDigit(partialCreditCard, modNumber) {
+            //Se separa cada digito de la tarjeta en un arreglo
+            partialCreditCard = partialCreditCard.split("");
+            let sum = 0;
+
+            //Se recorre de derecha a izquierda desde el ultimo digito
+            for (let i = partialCreditCard.length - 1; i >= 0; i -= 2) {
+                partialCreditCard[i] = Number(partialCreditCard[i]) * 2;
+                if (partialCreditCard[i] > 9) {
+                    partialCreditCard[i] = partialCreditCard[i] - 9;
+                }
+            }
+            
+            //Se suman todos los digitos
+            sum = partialCreditCard.reduce(
+                (acc, curr) => {
+                    return Number(acc) + Number(curr)
+                }
+            );
+
+            return ((sum * (modNumber - 1)) % modNumber);
+        }
+    </script>
+</body>
+
+</html>
