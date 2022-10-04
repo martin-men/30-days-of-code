@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 6 - Bingo</title>
+</head>
+
+<body>
+    <script>
+        let flag = true, opc, winner = -1, randNumber, randNumberSeq = ""; 
+        let gameMode, playersNum, playersArray = [], names = [], markedNumbers = [];
+
+        alert("Welcome to Bingo 75!");
+        while (flag) {
+            do {
+                gameMode = prompt("Game modes:\n1. Diagonals\n2. Lines\n3. Corners\n4. Full card");
+            } while ((Number(gameMode) < 1) || (Number(gameMode) > 4));
+            do {
+                playersNum = Number(prompt("How many players?"));
+            } while (playersNum <= 0);
+
+            names = new Array(playersNum);
+            playersArray = new Array(playersNum);
+
+            // Ingresar nombreas jugadores y crear sus cartones
+            for (let i = 0; i < playersNum; i++) {
+                names[i] = prompt("Player " + (i + 1) + " name:");
+                playersArray[i] = new Array(25);
+            }
+            fillCards(playersArray);
+            alert("Cards generated!");
+            // Mostrar cartones
+            for (let i = 0; i < playersNum; i++) {
+                alert("Player " + (i + 1) + ":\n" + cardToString(playersArray[i]));
+            }
+            // Jugar
+            while (winner == -1) {
+                randNumber = generateNumber(markedNumbers);
+                randNumberSeq += randNumber + "  ";
+                verifyExistence(playersArray, randNumber);
+                winner = verifyWinner(playersArray, gameMode);
+            }
+            alert("The sequence was: " + randNumberSeq);
+            alert("The winner is: " + names[winner] + "\n\n" + cardToString(playersArray[winner]));
+            markedNumbers = [];
+            winner = -1;
+
+            do {
+                opc = prompt("Do you want to play again?\n1. Yes\n2. No");
+            } while ((Number(opc) < 1) || (Number(opc) > 2));
+
+            if (opc == 2) {
+                flag = false;
+            }
+        }
+
+        function cardToString(card) {
+            let cardString = "";
+            let cardDimension = Math.sqrt(card.length);
+
+            for (let i = 0; i < card.length; i++) {
+                if (((i + 1) % cardDimension) == 0) {
+                    cardString += card[i] + "\n";
+                } else {
+                    cardString += card[i] + "-";
+                }
+            }
+
+            return cardString;
+        }
+
+        function fillCards(playersArray) {
+            for (let i = 0; i < playersArray.length; i++) {
+                // Arreglo que contiene los numeros que ya fueron generados
+                let existingNumbers = [];
+
+                for (let j = 0; j < playersArray[i].length; j++) {
+                    playersArray[i][j] = generateNumber(existingNumbers);
+                }
+            }
+        }
+
+        function generateNumber(markedNumbers) {
+            let number = String((Math.floor(Math.random() * 75)) + 1);
+
+            //Para asegurar que no se repita ningun numero
+            while (markedNumbers.includes(number)) {
+                number = String((Math.floor(Math.random() * 75)) + 1);
+            }
+            markedNumbers.push(number);
+
+            return number;
+        }
+
+        function verifyExistence(playersArray, number) {
+            for (let i = 0; i < playersArray.length; i++) {
+                for (let j = 0; j < playersArray[i].length; j++) {
+                    if (playersArray[i][j] === number) {
+                        // La "m" indica que el numero fue marcado en un carton
+                        playersArray[i][j] += "m";
+                        break;
+                    }
+                }
+            }
+        }
+
+        function gameMode1(playersArray) {
+            let auxCounter = 0;
+            //Matriz cardDimension x cardDimension
+            let cardDimension = Math.sqrt(playersArray[0].length);
+            //Para conteo de la diagonal izquierda
+            let leftAux = cardDimension + 1;
+            //Para coneo de la diagonal derecha
+            let rightAux = cardDimension - 1;
+
+            for (let i = 0; i < playersArray.length; i++) {
+                for (let j = 0; j < playersArray[i].length; j += leftAux) {
+                    if (playersArray[i][j].includes("m")) {
+                        auxCounter++;
+                    }
+                }
+                if (auxCounter == cardDimension) {
+                    return i;
+                } else {
+                    auxCounter = 0;
+                }
+            }
+            for (let i = 0; i < playersArray.length; i++) {
+                for (let j = cardDimension - 1; j < playersArray[i].length - 1; j += rightAux) {
+                    if (playersArray[i][j].includes("m")) {
+                        auxCounter++;
+                    }
+                }
+                if (auxCounter == cardDimension) {
+                    return i;
+                } else {
+                    auxCounter = 0;
+                }
+            }
+
+            return -1;
+        }
+
+        function gameMode2(playersArray) {
+            let auxCounter = 0;
+            //Matriz cardDimension x cardDimension
+            let cardDimension = Math.sqrt(playersArray[0].length);
+
+            for (let i = 0; i < playersArray.length; i++) {
+                for (let j = 0; j < playersArray[i].length; j++) {
+                    if ((j % cardDimension) == 0) {
+                        auxCounter = 0;
+                    } else if (playersArray[i][j].includes("m")) {
+                        auxCounter++;
+                    } else if (auxCounter == cardDimension) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        function gameMode3(playersArray) {
+            //Matriz cardDimension x cardDimension
+            let cardDimension = Math.sqrt(playersArray[0].length);
+
+            for (let i = 0; i < playersArray.length; i++) {
+                //Verificar las 4 esquinas
+                if ((playersArray[i][0].includes("m")) && (playersArray[i][cardDimension - 1].includes("m")) &&
+                    (playersArray[i][playersArray[0].length - 1].includes("m")) &&
+                    (playersArray[i][playersArray[0].length - cardDimension].includes("m"))) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function gameMode4(playersArray) {
+            let auxCounter = 0;
+
+            for (let i = 0; i < playersArray.length; i++) {
+                for (let j = 0; j < playersArray[i].length; j++) {
+                    if (playersArray[i][j].includes("m")) {
+                        auxCounter++;
+                    }
+                }
+                if (auxCounter == playersArray[0].length) {
+                    return i;
+                } else {
+                    auxCounter = 0;
+                }
+            }
+
+            return -1;
+        }
+
+        function verifyWinner(playersArray, gameMode) {
+            let winner;
+
+            switch (gameMode) {
+                // Diagonal
+                case "1":
+                    winner = gameMode1(playersArray);
+                    break;
+
+                // Linea
+                case "2":
+                    winner = gameMode2(playersArray);
+                    break;
+
+                // Esquina
+                case "3":
+                    winner = gameMode3(playersArray);
+                    break;
+
+                // Full
+                case "4":
+                    winner = gameMode4(playersArray);
+                    break;
+            }
+
+            return winner;
+        }
+    </script>
+</body>
+
+</html>
