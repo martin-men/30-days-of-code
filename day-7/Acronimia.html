@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 7 - Acronimia</title>
+</head>
+<body>
+    <script>
+        /* En español, para formar acrónimos o siglas se suelen omitir las palabras preposicionales,
+        conjunciones y artículos, es decir palabras sin mucha influencia en la frase. */
+        let spanishSpecialWords = ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 
+        'a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 'durante', 'en', 'entre', 'hacia', 
+        'hasta','mediante', 'para', 'por', 'según', 'sin', 'sobre', 'tras', 'versus', 'y', 'e', 
+        'ni', 'mas', 'pero', 'aún', 'aunque', 'sino', 'o', 'u', 'porque', 'pues', 'si', 'aunque', 
+        'así', 'como', 'tan', 'cuando'];
+        /* En inglés, el mismo tipo de palabras sí suelen incluirse en el acrónimo o sigla pero solo la
+        letra inicial y en minúscula. */
+        let englishSpecialWords = ['a', 'an', 'nor', 'but', 'or', 'yet', 'so',
+        'after', 'although', 'as', 'lest', 'thought', 'now', 'even', 'provided', 'if', 'where', 
+        'wherever', 'whereas', 'whether', 'since', 'because', 'whose', 'whoever', 'unless', 'while',
+        'before', 'why', 'until', 'how', 'since', 'than', 'till', 'whenever', 'supposing', 'when', 
+        'what', 'about', 'above', 'across', 'against', 'along', 'among', 'around', 'at', 'before', 
+        'after', 'behind', 'between', 'beyond', 'but', 'by', 'concerning', 'despite', 'down', 'during',
+        'except', 'following', 'from', 'in', 'including', 'into', 'like', 'near', 'off', 'on', 'onto', 
+        'out', 'over', 'past', 'plus', 'since', 'throughout', 'to', 'toward', 'towards', 'under', 'up', 
+        'upon', 'with', 'within', 'without'];
+        /* A pesar del anterior punto, hay ciertas palabras en el inglés que si suelen omitirse para
+        formar una sigla o acrónimo. */
+        let englishExceptions = ['and', 'of', 'for', 'the'];
+        let flag = true, opt, phrase;
+
+        alert('Welcome to the acronym generator!');
+        while (flag) {
+            opt = prompt('Choose an option/Elige una opción:\n1. Use English\n2. Usar Español\n3. Exit/Salir');
+
+            switch (opt) {
+                case '1':
+                    phrase = prompt('Enter a phrase: ');
+                    alert("The acronym is: " + getEnglishAcronym(phrase));
+                    break;
+                
+                case '2':
+                    phrase = prompt('Ingresa una frase: ');
+                    alert("El acrónimo es: " + getSpanishAcronym(phrase));
+                    break;
+
+                case '3':
+                    flag = false;
+                    break;
+
+                default:
+                    alert('Invalid option/Opción inválida');
+                    break;
+            }
+        }
+
+        function getSpanishAcronym(phrase) {
+            let acronym = '';
+            let words = getWordsArray(phrase);
+
+            for (let i = 0; i < words.length; i++) {
+                /* Si la palabra es parte del conjunto especial o es un número, no se agrega su inicial 
+                al acrónimo. */
+                if ((!spanishSpecialWords.includes(words[i])) && (isNaN(words[i]))) {
+                    /* Si la palabra inicia con "ch" o "ll", se agrega la primera letra en mayúscula 
+                    y la segunda en minúscula */
+                    if ((words[i].substring(0, 2).toLowerCase() === 'ch') ||
+                    (words[i].substring(0, 2).toLowerCase() === 'll')) {
+                        acronym += words[i].charAt(0).toUpperCase() + words[i].charAt(1).toLowerCase();
+                    } else {
+                        acronym += words[i].charAt(0).toUpperCase();
+                    }
+                } else if (!isNaN(words[i])) {
+                    acronym += words[i];
+                }
+            }
+            
+            return acronym;
+        }
+
+        function getEnglishAcronym(phrase) {
+            let acronym = '';
+            let words = getWordsArray(phrase);
+
+            for (let i = 0; i < words.length; i++) {
+                /* Si la palabra es parte del conjunto especial, se agrega su inicial en minúscula 
+                al acrónimo. */
+                if (englishSpecialWords.includes(words[i])) {
+                    acronym += words[i].charAt(0).toLowerCase();
+                /* Si la palabra es parte del conjunto de excepciones o es un número, no se agrega 
+                su inicial al acrónimo. */
+                } else if ((!englishExceptions.includes(words[i])) && (isNaN(words[i]))) {
+                    /* Si la palabra inicia con "ch" o "ll", se agrega la primera letra en mayúscula 
+                    y la segunda en minúscula */
+                    if ((words[i].substring(0, 2).toLowerCase() === 'ch') ||
+                    (words[i].substring(0, 2).toLowerCase() === 'll')) {
+                        acronym += words[i].charAt(0).toUpperCase() + words[i].charAt(1).toLowerCase();
+                    } else {
+                        acronym += words[i].charAt(0).toUpperCase();
+                    }
+                } else if (!isNaN(words[i])) {
+                    acronym += words[i];
+                }
+            }
+
+            return acronym;
+        }
+
+        /* Función detecta letras y números, y separa cada palabra de la frase en un arreglo. */
+        function getWordsArray(phrase) {
+            let asciiCode, words = '';
+
+            for (let i = 0; i < phrase.length; i++) {
+                asciiCode = phrase.charCodeAt(i);
+                if ((asciiCode > 47 && asciiCode < 58) || (asciiCode > 64 && asciiCode < 91) || 
+                (asciiCode > 96 && asciiCode < 123) || (asciiCode > 127 && asciiCode < 166) ||
+                (asciiCode > 180 && asciiCode < 184) || (asciiCode > 197 && asciiCode < 200) ||
+                (asciiCode > 209 && asciiCode < 217) || (asciiCode > 223 && asciiCode < 238)) {
+                    words += phrase.charAt(i);
+                } else {
+                    words += ' ';
+                }
+            }
+
+            return words.split(' ');
+        }
+    </script>
+</body>
+</html>
