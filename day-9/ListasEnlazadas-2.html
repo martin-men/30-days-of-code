@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 DAYS OF CODE - Day 9 - Listas enlazadas 2</title>
+</head>
+
+<body>
+    <script>
+        class Node {
+            constructor(data) {
+                this.data = data;
+                this.next = null;
+            }
+        }
+
+        class LinkedList {
+            constructor() {
+                this.head = null;
+                this.tail = null;
+                this.size = 0;
+            }
+
+            // Inserta nodo al inicio
+            unshift(newNode) {
+                if (this.head == null) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    newNode.next = this.head;
+                    this.head = newNode;
+                }
+                this.size++;
+            }
+
+            // Elimina nodo inicial y devuelve su contenido
+            // Si lista vacía, devuelve null
+            shift() {
+                if (this.head == null) {
+                    return null;
+                } else {
+                    let nodeData = this.head.data;
+
+                    this.head = this.head.next;
+                    this.size--;
+
+                    return nodeData;
+                }
+            }
+
+            // Inserta nodo al final
+            push(newNode) {
+                if (this.head == null) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    this.tail.next = newNode;
+                    this.tail = newNode;
+                }
+                this.size++;
+            }
+
+            // Elimina nodo final y devuelve su contenido
+            pop() {
+                if (this.head == null) {
+                    return null;
+                } else {
+                    let currNode = this.head;   // Nodo actual
+                    let prevNode = null;        // Nodo anterior
+                    let nodeData;        // Contenido del nodo a eliminar
+
+                    while (currNode.next != null) {
+                        prevNode = currNode;
+                        currNode = currNode.next;
+                    }
+
+                    nodeData = currNode.data;
+
+                    if (currNode == this.head) {
+                        this.head = null;
+                        this.tail = null;
+                    } else {
+                        prevNode.next = null;
+                        this.tail = prevNode;
+                    }
+                    this.size--;
+
+                    return nodeData;
+                }
+            }
+
+            // Separa la lista en dos: números pares e impares
+            getOddEvenLists() {
+                let currNode = this.head;
+                let even = new LinkedList();
+                let odd = new LinkedList();
+
+                while (currNode != null) {
+                    if ((Number(currNode.data) % 2) == 0) {
+                        even.push(new Node(currNode.data));
+                    } else {
+                        odd.push(new Node(currNode.data));
+                    }
+                    currNode = currNode.next;
+                }
+                
+                return [even, odd];
+            }
+
+            // Devuelve el tamaño de la lista
+            getSize() {
+                return this.size;
+            }
+
+            // Muestra la lista en forma de arco y flecha
+            toString() {
+                let currNode = this.head;
+                let str = '';
+                str = '             (\n';
+                str += '             |  \\\n'
+                str += '             |    \\\n'
+                str += '             |      \\\n'
+                str += '\\\\\\\\\\      |        )\n==== ';
+
+                while (currNode != null) {
+                    if (currNode == this.tail) {
+                        str += currNode.data + ' ====⫸';
+                    } else {
+                        str += currNode.data + ' = ';
+                    }
+                    currNode = currNode.next;
+                }
+                str += '\n/////      |        )\n';
+                str += '             |      /\n'
+                str += '             |    /\n'
+                str += '             |  /\n'
+                str += '             (\n';
+
+                return str;
+            }
+        }
+
+        let linkedList = new LinkedList(), evenOddLists, auxNode, auxData;
+        let flag = true, opt;
+
+        while (flag) {
+            opt = prompt('---- LISTAS ENLAZADAS ----\n' +
+                '1. Insertar al inicio\n' +
+                '2. Insertar al final\n' +
+                '3. Eliminar al inicio\n' +
+                '4. Eliminar al final\n' +
+                '5. Mostrar lista\n' +
+                '6. Tamaño de la lista\n' +
+                '7. Obtener números pares e impares\n' +
+                '8. Salir');
+
+            switch (opt) {
+                case '1':
+                    auxNode = new Node(prompt('Ingrese el dato del nodo: '));
+                    linkedList.unshift(auxNode)
+                    break;
+
+                case '2':
+                    auxNode = new Node(prompt('Ingrese el dato del nodo: '));
+                    linkedList.push(auxNode)
+                    break;
+
+                case '3':
+                    auxData = linkedList.shift();
+
+                    if (auxData == null) {
+                        alert('Lista vacía');
+                    } else {
+                        alert('Nodo eliminado:\n' + auxData);
+                    }
+                    break;
+
+                case '4':
+                    auxData = linkedList.pop();
+
+                    if (auxData == null) {
+                        alert('Lista vacía');
+                    } else {
+                        alert('Nodo eliminado:\n' + auxData);
+                    }
+                    break;
+
+                case '5':
+                    alert(linkedList.toString());
+                    break;
+
+                case '6':
+                    alert('El tamaño de la lista es: ' + linkedList.getSize());
+                    break;
+
+                case '7':
+                    evenOddLists = linkedList.getOddEvenLists();
+                    alert('Lista de números pares:\n' + evenOddLists[0].toString() + '\n\n' +
+                        'Lista de números impares:\n' + evenOddLists[1].toString());
+                    break;
+
+                case '8':
+                    flag = false;
+                    break;
+
+                default:
+                    alert('Opción no válida');
+                    break;
+            }
+        }
+    </script>
+</body>
+
+</html>
