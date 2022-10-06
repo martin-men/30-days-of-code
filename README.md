@@ -40,3 +40,6 @@ https://user-images.githubusercontent.com/104182598/193981920-454c77e1-dcae-42b0
 > # [DAY 8](https://github.com/martin-men/30-days-of-code/tree/main/day-8)
 https://user-images.githubusercontent.com/104182598/194152573-893ddb94-7732-4130-a63b-60613ba502dd.mp4
 
+> # [DAY 9](https://github.com/martin-men/30-days-of-code/tree/main/day-9)
+https://user-images.githubusercontent.com/104182598/194417282-97cf497d-fe58-453c-a54f-265a3b4ab607.mp4
+
