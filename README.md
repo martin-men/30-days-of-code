@@ -54,3 +54,6 @@ https://user-images.githubusercontent.com/104182598/195500661-54539bbe-a1bb-4ee9
 
 > # [DAY 13](https://github.com/martin-men/30-days-of-code/tree/main/day-13)
 https://user-images.githubusercontent.com/104182598/195711212-92474225-d088-4e1e-be08-2e1f10f77a3b.mp4
+
+> # [DAY 14](https://github.com/martin-men/30-days-of-code/tree/main/day-14)
+https://user-images.githubusercontent.com/104182598/195973175-bba0b882-34a8-4566-b702-8abc4df59ba5.mp4
