@@ -60,3 +60,7 @@ https://user-images.githubusercontent.com/104182598/195973175-bba0b882-34a8-4566
 
 > # [DAY 15 - 16](https://github.com/martin-men/30-days-of-code/tree/main/day-15-16)
 https://user-images.githubusercontent.com/104182598/196614994-d6929de4-c424-48cf-9af5-3d0a9d4263f1.mp4
+
+> # [DAY 17](https://github.com/martin-men/30-days-of-code/tree/main/day-17)
+https://user-images.githubusercontent.com/104182598/196864303-37e2228e-b032-4849-a910-29fa5fc3ddaf.mp4
+
