@@ -64,3 +64,5 @@ https://user-images.githubusercontent.com/104182598/196614994-d6929de4-c424-48cf
 > # [DAY 17](https://github.com/martin-men/30-days-of-code/tree/main/day-17)
 https://user-images.githubusercontent.com/104182598/196864303-37e2228e-b032-4849-a910-29fa5fc3ddaf.mp4
 
+> # [DAY 18](https://github.com/martin-men/30-days-of-code/tree/main/day-18)
+https://user-images.githubusercontent.com/104182598/198153431-16c7551d-a0ea-4707-88f1-1aacb0b4e385.mp4
