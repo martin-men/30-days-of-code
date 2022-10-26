@@ -29,14 +29,14 @@ export class People_Structure {
             for (let i = 0; i < this.people.length; i++) {
                 if (this.people[i].national) {
                     str += ` ${this.people[i].name}\n` + 
-                    this.drawSkull(this.people[i].name.length) + '\n';
+                    this.drawSkull(this.people[i].name.length, true) + '\n';
                 }
             }
         } else {
             for (let i = 0; i < this.people.length; i++) {
                 if (!this.people[i].national) {
                     str += ` ${this.people[i].name}\n` + 
-                    this.drawSkull(this.people[i].name.length) + '\n';
+                    this.drawSkull(this.people[i].name.length, false) + '\n';
                 }
             }
         }
@@ -54,14 +54,14 @@ export class People_Structure {
             for (let i = 0; i < this.people.length; i++) {
                 if (this.people[i].national) {
                     str += ` ${this.people[i].age} years old\n` + 
-                    this.drawSkull(Math.floor(this.people[i].age / 4)) + '\n';
+                    this.drawSkull(Math.floor(this.people[i].age / 4), true) + '\n';
                 }
             }
         } else {
             for (let i = 0; i < this.people.length; i++) {
                 if (!this.people[i].national) {
                     str += ` ${this.people[i].age} years old\n` + 
-                    this.drawSkull(Math.floor(this.people[i].age / 4)) + '\n';
+                    this.drawSkull(Math.floor(this.people[i].age / 4), false) + '\n';
                 }
             }
         }
@@ -79,14 +79,14 @@ export class People_Structure {
             for (let i = 0; i < this.people.length; i++) {
                 if (this.people[i].national) {
                     str += ` ${this.people[i].height} cm\n` + 
-                    this.drawSkull(Math.floor(this.people[i].height / 30)) + '\n';
+                    this.drawSkull(Math.floor(this.people[i].height / 30), true) + '\n';
                 }
             }
         } else {
             for (let i = 0; i < this.people.length; i++) {
                 if (!this.people[i].national) {
                     str += ` ${this.people[i].height} cm\n` + 
-                    this.drawSkull(Math.floor(this.people[i].height / 30)) + '\n';
+                    this.drawSkull(Math.floor(this.people[i].height / 30), false) + '\n';
                 }
             }
         }
@@ -94,9 +94,9 @@ export class People_Structure {
         return str;
     }
 
-    // Dibuja un craneo con el numero de caramelos especificado
-    // en una espada.
-    drawSkull(numCandies) {
+    // Dibuja un craneo con el numero de caramelos o coladas moradas 
+    // especificado en una espada.
+    drawSkull(numCandies, national) {
         let str = '                      ______\n' + 
         '                   .-"      "-.\n' +
         '                  /            \\ \n' +
@@ -122,7 +122,11 @@ export class People_Structure {
         '|  ||||||||||||||              ';
 
         for (let i = 0; i < numCandies; i++) {
-            str += '🍬';
+            if (national) {
+                str += '🍷';
+            } else { 
+                str += '🍬';
+            }
         }
         
         str += '\n' +
